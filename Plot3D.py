@@ -10,28 +10,34 @@ def Plot3D(file, aggregated=True, angle_H=45, angle_V=45):
 
     data=pd.read_csv(file, sep='\t')
 
+    col_names=list(data.columns)
+    sample=col_names[0]
+    x=col_names[1]
+    y=col_names[2]
+    z=col_names[3]
+
     if aggregated:
         fig = plt.figure()
         ax = Axes3D(fig)
         for index, row in data.iterrows():
-            ax.scatter(row['pca1'], row['pca2'], row['pca3'], marker='.', c='orange',s=50)
-        ax.set_xlabel('pca1')
-        ax.set_ylabel('pca2')
-        ax.set_zlabel('pca3')
+            ax.scatter(row[x], row[y], row[z], marker='.', c='orange',s=50)
+        ax.set_xlabel(x)
+        ax.set_ylabel(y)
+        ax.set_zlabel(z)
         ax.view_init(angle_H,angle_V)
         plt.show(block=True)
     else:
         fig = plt.figure()
         ax = Axes3D(fig)
-        samples=list(data['sample'].unique())
+        samples=list(data[sample].unique())
         for index, row in data.iterrows():
-            s=row['sample']
+            s=row[sample]
             index=samples.index(s)%len(samples)
             color=colors[index]
-            ax.scatter(row['pca1'], row['pca2'], row['pca3'], marker='.', c=color, s=50)
-        ax.set_xlabel('pca1')
-        ax.set_ylabel('pca2')
-        ax.set_zlabel('pca3')
+            ax.scatter(row[x], row[y], row[z], marker='.', c=color, s=50)
+        ax.set_xlabel(x)
+        ax.set_ylabel(y)
+        ax.set_zlabel(z)
         ax.view_init(angle_H,angle_V)
         plt.show(block=True)
 
@@ -54,7 +60,5 @@ if __name__ == "__main__":
     angle_H=args.angle_H
     angle_V=args.angle_V
     agg=args.agg
-
-    print(file, angle_H, angle_V)
     
     Plot3D(file, agg, angle_H, angle_V)
